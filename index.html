@@ -322,7 +322,8 @@
 
       <div class="note">
         This GitHub Pages demo runs a local heuristic simulation.
-        Connect the backend described in README.md for live URL crawling.
+        Robots.txt, meta robots, X-Robots-Tag, canonical, and other HTTP/HTML checks
+        require the live crawler backend described in README.md.
       </div>
     </div>
   </section>
@@ -350,9 +351,11 @@
       <div class="panel">
         <h3>Page Status</h3>
         <div class="signal"><span>HTTPS</span><span class="ok">✓ Detected</span></div>
-        <div class="signal"><span>Canonical</span><span class="ok">✓ Expected</span></div>
         <div class="signal"><span>Merchant</span><span class="ok">✓ Detected</span></div>
         <div class="signal"><span>Accessibility</span><span class="ok">✓ Analyzed</span></div>
+        <div class="signal"><span>Robots meta tag</span><span id="robotsResult" class="warn">⚠ Not checked</span></div>
+        <div class="signal"><span>X-Robots-Tag</span><span id="xRobotsResult" class="warn">⚠ Not checked</span></div>
+        <div class="signal"><span>Canonical</span><span id="canonicalResult" class="ok">✓ Expected</span></div>
       </div>
 
       <div class="panel">
@@ -378,6 +381,14 @@
         <div class="signal"><span>Redirects</span><span class="warn">3</span></div>
         <div class="signal"><span>Broken</span><span class="bad">2</span></div>
       </div>
+    </div>
+
+    <div class="panel recommendations">
+      <h3>Robots & Canonical Checks</h3>
+      <div class="signal"><span>Meta robots</span><span id="robotsDetail" class="warn">Not checked in demo mode</span></div>
+      <div class="signal"><span>X-Robots-Tag</span><span id="xRobotsDetail" class="warn">Not checked in demo mode</span></div>
+      <div class="signal"><span>Canonical URL</span><span id="canonicalDetail" class="ok">Expected to be present</span></div>
+      <div class="signal"><span>Canonical consistency</span><span id="canonicalConsistency" class="warn">Requires live crawl</span></div>
     </div>
 
     <div class="panel recommendations">
@@ -468,6 +479,17 @@
       document.getElementById("score").textContent = score;
       document.getElementById("merchant").textContent = merchant + " — Freshness Report";
       document.getElementById("resultUrl").textContent = value;
+
+      // These checks require server-side fetching of response headers/HTML.
+      // The static GitHub Pages demo therefore reports them as pending rather
+      // than pretending to have inspected the submitted URL.
+      document.getElementById("robotsResult").textContent = "⚠ Live crawl required";
+      document.getElementById("robotsDetail").textContent = "Live crawl required";
+      document.getElementById("xRobotsResult").textContent = "⚠ Live crawl required";
+      document.getElementById("xRobotsDetail").textContent = "Live HTTP headers required";
+      document.getElementById("canonicalResult").textContent = "⚠ Live crawl required";
+      document.getElementById("canonicalDetail").textContent = "Live HTML required";
+      document.getElementById("canonicalConsistency").textContent = "Requires live crawl";
 
       const label = document.getElementById("scoreLabel");
       const status = document.getElementById("pageStatus");
